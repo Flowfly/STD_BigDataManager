@@ -16,5 +16,14 @@ namespace STD_BigDataManager
         {
             InitializeComponent();
         }
+
+        private void BtnImportData_Click(object sender, EventArgs e)
+        {
+            if (ofdImportFile.ShowDialog() == DialogResult.OK)
+            {
+                Process process = new Process(ofdImportFile.InitialDirectory + ofdImportFile.FileName);
+                process.splitFile();
+            }
+        }
     }
 }
