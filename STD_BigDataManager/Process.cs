@@ -20,35 +20,45 @@ namespace STD_BigDataManager
 
         public void splitFile()
         {
+            int limitFile = 0;
             Thread[] threads = new Thread[8];
             int splitSize = File.ReadLines(this.FileUrl).Count() / 8;
-            using (var line = File.ReadLines(this.FileUrl).GetEnumerator())
+            using (var lines = File.ReadLines(this.FileUrl).GetEnumerator())
             {
                 for (int i = 0; i < 8; i++)
                 {
-                    for (int j = 0; j < splitSize; j++)
+                    if(i == 0)
                     {
-
+                        limitFile = splitSize;
                     }
-                    //var th = new Thread();
-                    //ImportData(line, splitSize, i);
+                    else
+                    {
+                        limitFile = (i+1) * splitSize;
+                    }
+
+                    var th = new Thread(ImportData);
+
+                    /*for (int j = i*splitSize; j < limitFile; j++)
+                    {
+                        
+                        // insertData
+                    }
+
+                    //var th = new Thread();*/
                 }
             }
 
         }
-        /*private static void ImportData(IEnumerator<string> line, int chunk)
+        private static void ImportData(IEnumerator<string> lines, int beginLine, int limitFile)
         {
             
-            for (int i = 0; i < splitSize; i++)
+            for (int i = beginLine; i < limitFile; i++)
             {
-                
 
-                if (!line.MoveNext())
-                {
-                }
 
-                //INSERT
+                //InsertData((string)lines.Current);
+
             }
-        }*/
+        }
     }
 }
