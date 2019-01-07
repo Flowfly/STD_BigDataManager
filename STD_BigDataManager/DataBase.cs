@@ -24,16 +24,18 @@ namespace STD_BigDataManager
             {
                 var insert = session.WriteTransaction(tx =>
                 {
-                    var result = tx.Run("CREATE (n:Password) " +
-                                        "SET n.password = $password " +
-                                        "RETURN n.password + ', from node ' + id(n)",
-                        new { password });
+                    var result = tx.Run($"CREATE (n:Password {{ text: '{password}'}}) RETURN n");
                     return result.Single()[0].As<string>();
                 });
                 Console.WriteLine(insert);
             }
 
             return true;
+        }
+        public int GetTotalOccurencies()
+        {
+
+            return 1;
         }
     }
 }

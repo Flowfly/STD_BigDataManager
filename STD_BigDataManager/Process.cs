@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace STD_BigDataManager
 {
@@ -23,8 +24,11 @@ namespace STD_BigDataManager
             int limitFile = 0;
             Thread[] threads = new Thread[8];
             int splitSize = File.ReadLines(this.FileUrl).Count() / 8;
+            
             using (var lines = File.ReadLines(this.FileUrl).GetEnumerator())
             {
+                lines.MoveNext();
+                
                 for (int i = 0; i < 8; i++)
                 {
                     if(i == 0)
@@ -36,28 +40,21 @@ namespace STD_BigDataManager
                         limitFile = (i+1) * splitSize;
                     }
 
-                    var th = new Thread(ImportData);
-
-                    /*for (int j = i*splitSize; j < limitFile; j++)
-                    {
-                        
-                        // insertData
-                    }
-
-                    //var th = new Thread();*/
+                    //threads[i] = new Thread(() => ImportData(lines, (i * splitSize), limitFile));
                 }
-            }
 
+
+                //threads.ToList().ForEach(th => th.Start());
+                ImportData(lines, (splitSize), limitFile);
+            }
         }
         private static void ImportData(IEnumerator<string> lines, int beginLine, int limitFile)
         {
-            
+            DataBase db = new DataBase();
             for (int i = beginLine; i < limitFile; i++)
             {
-
-
-                //InsertData((string)lines.Current);
-
+                db.InsertData(lines.Current.ToString());
+                lines.MoveNext();
             }
         }
     }
